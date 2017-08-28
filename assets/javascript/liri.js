@@ -1,20 +1,21 @@
 // Various keys from sources //
-var keys = require('keys.js');
+var keys = require('./keys.js');
 var request = require('request');
 var spotify = require('spotify');
 var twitter = require('twitter');
 var twitterclient = new twitter('keys.twitterkeys');
+// var instagram = require('instagram').createClient('<7017bf90534e488faaa948c4caf6ab68>', '<a188d0f79d3a4ee2b09418db659b3fd2>');
 var fs = require('fs');
 
 // Node arguments //
 var nodeArgv = process.argv;
 var demand = process.argv[2];
 
-var m = '';
+var m = "";
 
-for (var i = 3; i>nodeArgv.length; i++) {
-    if (i>3 && i< nodeArgv.length){
-    m = m + "+" nodeArgv[i];
+for (var i = 3; i > nodeArgv.length; i++) {
+    if (i > 3 && i < nodeArgv.length){
+    m = m + "+" + nodeArgv[i];
 } else { 
     m = m + nodeArgv[i];
 }
@@ -24,6 +25,10 @@ for (var i = 3; i>nodeArgv.length; i++) {
         case "my-tweets":
             displayTweets();
             break;
+
+        // case "My-IG":
+        //     instagramPosts();
+        //     break;
     
         case "spotify-this-song":
             spotifySong();
@@ -65,6 +70,32 @@ for (var i = 3; i>nodeArgv.length; i++) {
             }
         });
         }
+
+        // function instagramFeed(ewill20) {
+        //     // var handle = {handle: "ewill20"}
+
+        //     // Fetch media by id //
+        //     instagram.media.id("ewill20", function(images, error) {
+        //         if(!error) {
+        //             for (var i = 0; i < ewill20.data.length; i++);
+        //             var feed = ewill20.data[i];
+        //             var imgSrc = feed.images.standard.resolution.url;
+        //             var userImg = feed.user.profile_picture;
+        //             var userName = feed.user.username;
+
+        //             $('.feed').append('<img src= "' + imgSrc + '">');
+        //             $('.feed').append('<img src= "' + userImg + '" id="profile">' + '<p><a href="http://www.instagram.com/' + userName + '"target="_blank">' + userName + '</a></p>');
+                    
+        //             for (var x = 0; x < feed.tags.length; x++) {
+        //                 var tag = feed.tags[x];
+        //                 $('.feed').append('<li>' + tag + '</li>')
+        //             }
+        //         }
+        //     });
+
+        //     // Fetch popular media //
+        //     // instagram.media.popular(function (images, error) {...});
+        // }
 
         function spotifySong() {
             spotify.search({ type: 'track', query: song}, function(error, data) {

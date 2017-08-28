@@ -1,3 +1,5 @@
+
+
 console.log('this is loaded');
 exports.twitterkeys = {
     consumer_key: '5OLBsWMTMhmh1Oj3aIUKlfkkF',
@@ -9,4 +11,10 @@ console.log('this is spotify');
 exports.spotifykeys = {
     consumer_key: '82d3691d3b25410a98578af128ccdd73',
     consumer_secret: 'aadae6add1a847929ec9b24ee67763ad',
+};
+console.log("this is Instagram");
+exports.instagramkeys = {
+    client_id: '7017bf90534e488faaa948c4caf6ab68',
+    client_secret: 'a188d0f79d3a4ee2b09418db659b3fd2', 
 }
+
