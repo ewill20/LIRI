@@ -52,10 +52,18 @@ var demandArgument = process.argv[3];
         }
 
         function displayTweets() {
+
+            var cleint = new Twitter({
+                consumer_key: twitterKeys.consumer_key,
+                consumer_secret: twitterKeys.consumer_secret,
+                access_token_key: twitterKeys.access_token_key,
+                access_token_secret: twitterKeys.access_token_secret
+            });
             // Display the last 20 posts //
         var screenName = {screenName: "ewill20"}
-        client.get('statuses/user_timeline', screenName, function(error, tweets, response){
+        client.get('statuses/user_timeline', {count: 20, trim_user: false, exclude_replies: true, exclude_rts: false}, function(error, tweets, response){
             if(!error) {
+                console.log('Twitter error: ' + error);
                 for (var i = 0; i < tweets.length; i++) {
                     var date = tweets[i].created_at;
                     console.log('@ewill20: ' + tweets[i].text + 'Created At: ' + date.substring(0, 19));
