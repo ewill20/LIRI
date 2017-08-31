@@ -8,18 +8,18 @@ var twitterclient = new twitter('keys.twitterkeys');
 var fs = require('fs');
 
 // Node arguments //
-var nodeArgv = process.argv;
+
 var demand = process.argv[2];
+var demandArgument = process.argv[3];
+// var m = "";
 
-var m = "";
-
-for (var i = 3; i > nodeArgv.length; i++) {
-    if (i > 3 && i < nodeArgv.length){
-    m = m + "+" + nodeArgv[i];
-} else { 
-    m = m + nodeArgv[i];
-}
-}
+// for (var i = 3; i > demandArgument.length; i++) {
+//     if (i > 3 && i < demandArgument.length){
+//     m = m + "+" + demandArgument[i];
+// } else { 
+//     m = m + nodeArgv[i];
+// }
+// }
 
     switch(demand){
         case "my-tweets":
@@ -31,12 +31,12 @@ for (var i = 3; i > nodeArgv.length; i++) {
         //     break;
     
         case "spotify-this-song":
-            spotifySong();
+            spotifySong(demandArgument);
             break;
 
         case "movie-this":
-            if(m){
-                runOMDB(m)
+            if(demandArgument){
+                runOMDB(demandArgument)
             } else {
                 runOMDB("Mr. Nobody")
             }
