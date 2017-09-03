@@ -106,7 +106,7 @@ var demandArgument = process.argv[3];
         // }
 
         function spotifySong() {
-            spotify.search({ type: 'track', query: song}, function(error, data) {
+            spotify.search({ type: 'track', query: 'song'}, function(error, data) {
                 if(!error) {
                     for (var i = 0; i < data.tracks.items.length; i++) {
                         var songInfo = data.tracks.items[i];
