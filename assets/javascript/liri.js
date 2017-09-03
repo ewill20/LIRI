@@ -135,7 +135,8 @@ var demandArgument = process.argv[3];
 
         function runOMDB(movie) {
             var omdbURL = "http//www.omdbapi.com/?t=" + movie + "&plot=short&tomatoes=true";
-
+            console.log(movie);
+            console.log(omdbURL)
             request(omdbURL, function(error, response, body) {
                 if(!error && response.statusCode == 200) {
                     var body = JSON.parse(body);
