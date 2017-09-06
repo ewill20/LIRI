@@ -3,12 +3,17 @@ var keys = require('./keys.js');
 var request = require('request');
 var spotify = require('spotify');
 var twitter = require('twitter');
-var twitterclient = new twitter('keys.twitterkeys');
+var twitterclient = new twitter({
+    consumer_key: '5OLBsWMTMhmh1Oj3aIUKlfkkF',
+    consumer_secret: 'SoR6cP9mlKey39vjWVt5sSnplBIi05j7JxxTtqdTI3tLHtQchB',
+    access_token_key: '539295545-JextoeZDLMRTHi59tukElW7GPaOCaK3PHpalp9St',
+    access_token_secret: 'Tq7X6XuhVxnp79WyhUcbFdY2FRVAd03i9DlC91Y9znEbE',
+});
 // var instagram = require('instagram').createClient('<7017bf90534e488faaa948c4caf6ab68>', '<a188d0f79d3a4ee2b09418db659b3fd2>');
 var fs = require('fs');
 
 // Node arguments //
-
+// var twitterKeys = keys.twitterKeys;
 var demand = process.argv[2];
 var demandArgument = process.argv[3];
 // var m = "";
@@ -31,12 +36,12 @@ var demandArgument = process.argv[3];
         //     break;
     
         case "spotify-this-song":
-            spotifySong(demandArgument);
+            spotifySong();
             break;
 
         case "movie-this":
             if(demandArgument){
-                runOMDB(demandArgument)
+                runOMDB()
             } else {
                 runOMDB("Mr. Nobody")
             }
@@ -51,32 +56,32 @@ var demandArgument = process.argv[3];
             break;
         }
 
+        // var app = {
+
         function displayTweets() {
-
-            var cleint = new Twitter({
-                consumer_key: twitterKeys.consumer_key,
-                consumer_secret: twitterKeys.consumer_secret,
-                access_token_key: twitterKeys.access_token_key,
-                access_token_secret: twitterKeys.access_token_secret
-            });
             // Display the last 20 posts //
-        var screenName = {screenName: "ewill20"}
-        client.get('statuses/user_timeline', {count: 20, trim_user: false, exclude_replies: true, exclude_rts: false}, function(error, tweets, response){
+        var screenName = {screen_name: 'ewill20'};
+        twitterclient.get('statuses/user_timeline', screenName, function(error, tweetData, response){
             if(!error) {
-                console.log('Twitter error: ' + error);
-                for (var i = 0; i < tweets.length; i++) {
-                    var date = tweets[i].created_at;
-                    console.log('@ewill20: ' + tweets[i].text + 'Created At: ' + date.substring(0, 19));
+                for(var i = 0; i < tweetData.length; i++) {
+                    var date = tweetData[i].created_at;
+                    console.log('@ewill20: ' + tweetData[i].text + 'Created At: ' + date.substring(0, 20));
                     console.log("------------------");
+                console.log(' ');
+                console.log('=============My Tweets ============');
+                tweetData.forEach(function(obj) {
+                    console.log('-------------------');
+                    console.log('Time: ' + obj.created_at);
+                    console.log('Tweet: ' + obj.text);
+                    console.log('-----------------');
+                    console.log(' ');
 
-                    // adds text to log.txt file //
-                    fs.appendFile('log.txt', "@ewill20: " + tweets[i].text + " Created At: " + date.substring(0, 19));
-                    fs.appendFile('log.txt', "---------------");
+                });
                 }
             } else {
                 console.log('An Error Occurred');
             }
-        });
+            });
         }
 
         // function instagramFeed(ewill20) {
@@ -105,8 +110,8 @@ var demandArgument = process.argv[3];
         //     // instagram.media.popular(function (images, error) {...});
         // }
 
-        function spotifySong() {
-            spotify.search({ type: 'track', query: 'song'}, function(error, data) {
+        function spotifySong(song) {
+            spotify.search({ type: 'track', query: song}, function(error, data) {
                 if(!error) {
                     for (var i = 0; i < data.tracks.items.length; i++) {
                         var songInfo = data.tracks.items[i];
@@ -134,13 +139,25 @@ var demandArgument = process.argv[3];
         }
 
         function runOMDB(movie) {
-            var omdbURL = "http//www.omdbapi.com/?t=" + movie + "&plot=short&tomatoes=true";
+            var movie = process.argv[3];
+            var queryURL = "http//www.omdbapi.com/?t=" + movie + "&y=&plot=short&r=json&tomatoes=true&apikey=40e9cece";
+            
+
+            // $.ajax({
+            //     url: queryURL,
+            //     method: "GET"
+            //   }).done(function(response) {
+            //     console.log(response);
+            //     console.log(response.Runtime);
+            //   });
+          
+          
             console.log(movie);
-            console.log(omdbURL)
-            request(omdbURL, function(error, response, body) {
+            console.log(queryURL)
+            request(queryURL, function(error, response, body) {
                 if(!error && response.statusCode == 200) {
                     var body = JSON.parse(body);
-
+                    console.log("\n////////////////////Movie This Shit//////////////\n");
                     console.log("Title: " + body.Title);
                     console.log("Release Year: " + body.Year);
                     console.log("IMdB Rating: " + body.imdbRating);
