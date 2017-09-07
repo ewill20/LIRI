@@ -1,5 +1,6 @@
 // Various keys from sources //
 var keys = require('./keys.js');
+var $ = require('jQuery');
 var request = require('request');
 var spotify = require('spotify');
 var twitter = require('twitter');
@@ -40,10 +41,10 @@ var demandArgument = process.argv[3];
             break;
 
         case "movie-this":
-            if(demandArgument){
-                runOMDB()
+            if((demandArgument === "") || (demandArgument === undefined)) {
+                runOMDB("Mr. Nobody");
             } else {
-                runOMDB("Mr. Nobody")
+                runOMDB(demandArgument)
             }
             break;
             
@@ -139,8 +140,7 @@ var demandArgument = process.argv[3];
         }
 
         function runOMDB(movie) {
-            var movie = process.argv[3];
-            var queryURL = "http//www.omdbapi.com/?t=" + movie + "&y=&plot=short&r=json&tomatoes=true&apikey=40e9cece";
+            var queryURL = "http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&r=json&tomatoes=true&apikey=40e9cece";
             
 
             // $.ajax({
@@ -155,9 +155,10 @@ var demandArgument = process.argv[3];
             console.log(movie);
             console.log(queryURL)
             request(queryURL, function(error, response, body) {
+                if(error) throw error;
                 if(!error && response.statusCode == 200) {
                     var body = JSON.parse(body);
-                    console.log("\n////////////////////Movie This Shit//////////////\n");
+                    console.log("\n////////////////////Movie This//////////////\n");
                     console.log("Title: " + body.Title);
                     console.log("Release Year: " + body.Year);
                     console.log("IMdB Rating: " + body.imdbRating);
@@ -165,9 +166,8 @@ var demandArgument = process.argv[3];
                     console.log("Language: " + body.Language);
                     console.log("Plot: " + body.Plot);
                     console.log("Actors: " + body.Actors);
-                    console.log("Rotten Tomatoes Rating: " + body.tomatoRating);
+                    console.log("Rotten Tomatoes Rating: " + body.Metascore);
                     console.log("Rotten Tomatoes URL: " + body.tomatoURL);
-
 
                 // Adds information to log.txt //
                 fs.appendFile('log.txt', "Title: " + body.Title);
@@ -177,11 +177,11 @@ var demandArgument = process.argv[3];
                 fs.appendFile('log.txt', "Language: " + body.Language);
                 fs.appendFile('log.txt', "Plot: " + body.Plot);
                 fs.appendFile('log.txt', "Actors: " + body.Actors);
-                fs.appendFile('log.txt', "Rotten Tomatoes Rating: " + body.tomatoRating);
+                fs.appendFile('log.txt', "Rotten Tomatoes Rating: " + body.Metascore);
                 fs.appendFile('log.txt', "Rotten Tomatoes URL: " + body.tomatoURL);
                 
-                } else {
-                    console.log("An Error Occurred");
+                } if (response === undefined) {
+                    runOMDB("Mr. Nobody");
                 }
                 if (movie === "Mr. Nobody") {
                     console.log("-----------------");
