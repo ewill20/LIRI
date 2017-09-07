@@ -2,7 +2,7 @@
 var keys = require('./keys.js');
 var $ = require('jQuery');
 var request = require('request');
-var spotify = require('spotify');
+var Spotify = require('node-spotify-api');
 var twitter = require('twitter');
 var twitterclient = new twitter({
     consumer_key: '5OLBsWMTMhmh1Oj3aIUKlfkkF',
@@ -17,6 +17,7 @@ var fs = require('fs');
 // var twitterKeys = keys.twitterKeys;
 var demand = process.argv[2];
 var demandArgument = process.argv[3];
+var params = process.argv.slice(2);
 // var m = "";
 
 // for (var i = 3; i > demandArgument.length; i++) {
@@ -37,7 +38,11 @@ var demandArgument = process.argv[3];
         //     break;
     
         case "spotify-this-song":
+            if(params[1]){
             spotifySong();
+            } else {
+                spotifySong("I Saw The Sign");
+            }
             break;
 
         case "movie-this":
@@ -111,33 +116,60 @@ var demandArgument = process.argv[3];
         //     // instagram.media.popular(function (images, error) {...});
         // }
 
-        function spotifySong(song) {
-            spotify.search({ type: 'track', query: song}, function(error, data) {
-                if(!error) {
-                    for (var i = 0; i < data.tracks.items.length; i++) {
-                        var songInfo = data.tracks.items[i];
-                    // Artist Information //
-                    console.log("Artist: " + songInfo.artists[0].name);
-                    // Song Name //
-                    console.log("Song: " + songInfo.name);
-                    // Spotify Preview //
-                    console.log("Preview URL: " + songInfo.preview_url);
-                    // Album Name //
-                    console.log("Album: " + songInfo.album.name);
-                    console.log("--------------");
+        function spotifySong() {
+            // var Spotify = new spotify ({
+                var spotify = new Spotify({
+                    id: keys.spotifykeys.clientId,
+                    secret: keys.spotifykeys.clientSecret,
+                });
+                var songInfo = process.argv;
+                songInfo.shift();
+                songInfo.shift();
+                request(spotifySong(songInfo.join('+')),
 
-                    // Adds information to log.txt //
-                    fs.appendFile('log.txt', songInfo.artists[0].name);
-                    fs.appendFile('log.txt', songInfo.name);
-                    fs.appendFile('log.txt', songInfo.preview_url);
-                    fs.appendFile('log.txt', songInfo.album.name);
-                    fs.appendFile('log.txt', "---------------");
+                // var queryString = process.argv[3];
+                spotify.search({ type: 'track', query: queryString, limit: 1 }, function(err, data) {
+                    if (err) {
+                        console.log('error = ' + err);
                     }
-                } else {
-                    console.log("An Error Occurred");
-                }
-            });
-        }
+                
+                    console.log('spotify data = ', data);
+                    console.log(data.tracks.items[0]);
+
+                
+                }),
+                    
+                    // for (var i = 0; i < data.tracks.items.length; i++) {
+                    //     var songInfo = data.body;
+                    // // Artist Information //
+                    // console.log("Artist: " + songInfo.artists[0].name);
+                    // // Song Name //
+                    // console.log("Song: " + songInfo.name);
+                    // // Spotify Preview //
+                    // console.log("Preview URL: " + songInfo.preview_url);
+                    // // Album Name //
+                    // console.log("Album: " + songInfo.album.name);
+                    // console.log("--------------");
+
+                    // // Adds information to log.txt //
+                    // fs.appendFile('log.txt', songInfo.artists[0].name);
+                    // fs.appendFile('log.txt', songInfo.name);
+                    // fs.appendFile('log.txt', songInfo.preview_url);
+                    // fs.appendFile('log.txt', songInfo.album.name);
+                    // fs.appendFile('log.txt', "---------------");
+                    // }
+        //         } else {
+        //             var songInfo = data.tracks.items[0];
+        //             var songResult = console.log(songInfo.artists[0].name)
+        //                             console.log(songInfo.name)
+        //                             console.log(songInfo.album.name)
+        //                             console.log(songInfo.preview_url)
+        //                             console.log(songResult)
+        //         }
+        //         console.log(data);
+        //     });
+        
+        // }
 
         function runOMDB(movie) {
             var queryURL = "http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&r=json&tomatoes=true&apikey=40e9cece";
@@ -194,7 +226,7 @@ var demandArgument = process.argv[3];
                     fs.appendFile('log.txt', "It can also be found on Netflix!");
                 }
             });
-        }
+        },
              
         function followCommand() {
             fs.readFile('random.txt', "utf8", function(error, data) {
@@ -206,4 +238,4 @@ var demandArgument = process.argv[3];
 
 
 
-
+    )} 

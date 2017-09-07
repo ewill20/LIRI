@@ -9,8 +9,8 @@ exports.twitterkeys = {
 };
 console.log('this is spotify');
 exports.spotifykeys = {
-    consumer_key: '82d3691d3b25410a98578af128ccdd73',
-    consumer_secret: 'aadae6add1a847929ec9b24ee67763ad',
+    clientId: '82d3691d3b25410a98578af128ccdd73',
+    clientSecret: 'aadae6add1a847929ec9b24ee67763ad',
 };
 console.log("this is Instagram");
 exports.instagramkeys = {
