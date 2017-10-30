@@ -1,0 +1,28 @@
+{
+  "name": "liri",
+  "version": "1.0.0",
+  "description": "Liri Bot App",
+  "main": "index.js",
+  "dependencies": {
+    "jQuery": "^1.7.4",
+    "keys": "^0.1.2",
+    "omdb": "^0.8.0",
+    "request": "^2.83.0",
+    "spotify": "^0.3.0",
+    "twitter": "^1.7.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "\"test\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ewill20/LIRI.git"
+  },
+  "author": "\"Eric Willard\"",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ewill20/LIRI/issues"
+  },
+  "homepage": "https://github.com/ewill20/LIRI#readme"
+}
