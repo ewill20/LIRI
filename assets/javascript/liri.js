@@ -1,8 +1,15 @@
 // Various keys from sources //
 var keys = require('./keys.js');
+
+// Dependencies //
 var $ = require('jQuery');
+var fs = require('fs');
 var request = require('request');
 var Spotify = require('node-spotify-api');
+var spotifyClient = new Spotify ({
+                	id: keys.spotifykeys.clientId,
+                    secret: keys.spotifykeys.clientSecret,
+                });
 var twitter = require('twitter');
 var twitterclient = new twitter({
     consumer_key: '5OLBsWMTMhmh1Oj3aIUKlfkkF',
@@ -10,24 +17,23 @@ var twitterclient = new twitter({
     access_token_key: '539295545-JextoeZDLMRTHi59tukElW7GPaOCaK3PHpalp9St',
     access_token_secret: 'Tq7X6XuhVxnp79WyhUcbFdY2FRVAd03i9DlC91Y9znEbE',
 });
-// var instagram = require('instagram').createClient('<7017bf90534e488faaa948c4caf6ab68>', '<a188d0f79d3a4ee2b09418db659b3fd2>');
-var fs = require('fs');
+
+
 
 // Node arguments //
-// var twitterKeys = keys.twitterKeys;
+var nodeArgv = process.argv;
 var demand = process.argv[2];
 var demandArgument = process.argv[3];
 var params = process.argv.slice(2);
-// var m = "";
-
-// for (var i = 3; i > demandArgument.length; i++) {
-//     if (i > 3 && i < demandArgument.length){
-//     m = m + "+" + demandArgument[i];
-// } else { 
-//     m = m + nodeArgv[i];
-// }
-// }
-
+var x = "";
+// Attaches multiple word arguments //
+for (var i=3; i<nodeArgv.length; i++){
+  if(i>3 && i<nodeArgv.length){
+    x = x + "+" + nodeArgv[i];
+  } else{
+    x = x + nodeArgv[i];
+  }
+}
     switch(demand){
         case "my-tweets":
             displayTweets();
@@ -38,18 +44,18 @@ var params = process.argv.slice(2);
         //     break;
     
         case "spotify-this-song":
-            if(params[1]){
-            spotifySong();
+            if(x){
+            spotifySong(x);
             } else {
                 spotifySong("I Saw The Sign");
             }
             break;
 
         case "movie-this":
-            if((demandArgument === "") || (demandArgument === undefined)) {
-                runOMDB("Mr. Nobody");
+            if((x) || (demandArgument === undefined)) {
+                runOMDB(x);
             } else {
-                runOMDB(demandArgument)
+                runOMDB("Mr. Nobody")
             }
             break;
             
@@ -115,73 +121,85 @@ var params = process.argv.slice(2);
         //     // Fetch popular media //
         //     // instagram.media.popular(function (images, error) {...});
         // }
-
-        function spotifySong() {
-            // var Spotify = new spotify ({
-                var spotify = new Spotify({
-                    id: keys.spotifykeys.clientId,
-                    secret: keys.spotifykeys.clientSecret,
-                });
-                var songInfo = process.argv;
-                songInfo.shift();
-                songInfo.shift();
-                request(spotifySong(songInfo.join('+')),
-
-                // var queryString = process.argv[3];
-                spotify.search({ type: 'track', query: queryString, limit: 1 }, function(err, data) {
-                    if (err) {
-                        console.log('error = ' + err);
-                    }
-                
-                    console.log('spotify data = ', data);
-                    console.log(data.tracks.items[0]);
-
-                
-                }),
-                    
-                    // for (var i = 0; i < data.tracks.items.length; i++) {
-                    //     var songInfo = data.body;
-                    // // Artist Information //
-                    // console.log("Artist: " + songInfo.artists[0].name);
-                    // // Song Name //
-                    // console.log("Song: " + songInfo.name);
-                    // // Spotify Preview //
-                    // console.log("Preview URL: " + songInfo.preview_url);
-                    // // Album Name //
-                    // console.log("Album: " + songInfo.album.name);
-                    // console.log("--------------");
-
-                    // // Adds information to log.txt //
-                    // fs.appendFile('log.txt', songInfo.artists[0].name);
-                    // fs.appendFile('log.txt', songInfo.name);
-                    // fs.appendFile('log.txt', songInfo.preview_url);
-                    // fs.appendFile('log.txt', songInfo.album.name);
-                    // fs.appendFile('log.txt', "---------------");
-                    // }
-        //         } else {
-        //             var songInfo = data.tracks.items[0];
-        //             var songResult = console.log(songInfo.artists[0].name)
-        //                             console.log(songInfo.name)
-        //                             console.log(songInfo.album.name)
-        //                             console.log(songInfo.preview_url)
-        //                             console.log(songResult)
-        //         }
-        //         console.log(data);
-        //     });
+// function spotifySong(song){
+//   Spotify.search({ type: 'track', query: song}, function(error, data){
+//     if(!error){
+//       for(var i = 0; i < data.tracks.items.length; i++){
+//         var songData = data.tracks.items[i];
+//         //artist
+//         console.log("Artist: " + songData.artists[0].name);
+//         //song name
+//         console.log("Song: " + songData.name);
+//         //spotify preview link
+//         console.log("Preview URL: " + songData.preview_url);
+//         //album name
+//         console.log("Album: " + songData.album.name);
+//         console.log("-----------------------");
         
-        // }
+//         //adds text to log.txt
+//         fs.appendFile('log.txt', songData.artists[0].name);
+//         fs.appendFile('log.txt', songData.name);
+//         fs.appendFile('log.txt', songData.preview_url);
+//         fs.appendFile('log.txt', songData.album.name);
+//         fs.appendFile('log.txt', "-----------------------");
+//       }
+//     } else{
+//       console.log('Error occurred.');
+//     }
+//   });
+// }
+        function spotifySong(value) {
+                
+                    
+          
+            //     var songInfo = process.argv;
+            //     songInfo.shift();
+            //     songInfo.shift();
+            //     request(spotifySong(songInfo.join('+')),
 
+            //     // var queryString = process.argv[3];
+            //     spotify.search({ type: 'track', query: queryString, limit: 1 }, function(err, data) {
+            //         if (err) {
+            //             console.log('error = ' + err);
+            //         }
+                
+            //         console.log('spotify data = ', data);
+            //         console.log(data.tracks.items[0]);
+
+                
+            //     }));
+            // }
+                 Spotify.search({type: 'track', query: value || 'ace of base the sign'}, function(err, data) {
+    if (err) {
+        console.log('Error occurred: ' + err);
+        return;
+    }
+    else {
+    console.log("/////////Data////////")
+    console.log(data);
+    console.log("///////Data.tracks.items///////")
+    var spotifyCall = data.tracks.items[0];
+    console.log(spotifyCall);
+    console.log("/////////spotifyCall.artists[0].name////////");
+
+// if no error, show me the information from the API
+    console.log("\n/////////////////SPOTIFY THIS////////////////\n");
+    var artist = spotifyCall.artists[0].name;
+    console.log("Artist: " + artist);
+    var song = spotifyCall.name;
+    console.log("Song name: " + song);
+    var preview = spotifyCall.preview_url;
+    console.log("Preview Link: " + preview);
+    var album = spotifyCall.album.name;
+    console.log("Album: " + album);
+
+}
+});
+}   
+                    
         function runOMDB(movie) {
             var queryURL = "http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&r=json&tomatoes=true&apikey=40e9cece";
-            
-
-            // $.ajax({
-            //     url: queryURL,
-            //     method: "GET"
-            //   }).done(function(response) {
-            //     console.log(response);
-            //     console.log(response.Runtime);
-            //   });
+      		
           
           
             console.log(movie);
@@ -226,7 +244,7 @@ var params = process.argv.slice(2);
                     fs.appendFile('log.txt', "It can also be found on Netflix!");
                 }
             });
-        },
+        }
              
         function followCommand() {
             fs.readFile('random.txt', "utf8", function(error, data) {
@@ -238,4 +256,4 @@ var params = process.argv.slice(2);
 
 
 
-    )} 
+    
