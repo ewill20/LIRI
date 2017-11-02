@@ -2,11 +2,10 @@
 var keys = require('./keys.js');
 
 // Dependencies //
-var $ = require('jQuery');
 var fs = require('fs');
 var request = require('request');
-var Spotify = require('node-spotify-api');
-var spotifyClient = new Spotify ({
+var spotify = require('node-spotify-api');
+var spotifyClient = new spotify ({
                 	id: keys.spotifykeys.clientId,
                     secret: keys.spotifykeys.clientSecret,
                 });
@@ -95,81 +94,9 @@ for (var i=3; i<nodeArgv.length; i++){
             }
             });
         }
-
-        // function instagramFeed(ewill20) {
-        //     // var handle = {handle: "ewill20"}
-
-        //     // Fetch media by id //
-        //     instagram.media.id("ewill20", function(images, error) {
-        //         if(!error) {
-        //             for (var i = 0; i < ewill20.data.length; i++);
-        //             var feed = ewill20.data[i];
-        //             var imgSrc = feed.images.standard.resolution.url;
-        //             var userImg = feed.user.profile_picture;
-        //             var userName = feed.user.username;
-
-        //             $('.feed').append('<img src= "' + imgSrc + '">');
-        //             $('.feed').append('<img src= "' + userImg + '" id="profile">' + '<p><a href="http://www.instagram.com/' + userName + '"target="_blank">' + userName + '</a></p>');
-                    
-        //             for (var x = 0; x < feed.tags.length; x++) {
-        //                 var tag = feed.tags[x];
-        //                 $('.feed').append('<li>' + tag + '</li>')
-        //             }
-        //         }
-        //     });
-
-        //     // Fetch popular media //
-        //     // instagram.media.popular(function (images, error) {...});
-        // }
-// function spotifySong(song){
-//   Spotify.search({ type: 'track', query: song}, function(error, data){
-//     if(!error){
-//       for(var i = 0; i < data.tracks.items.length; i++){
-//         var songData = data.tracks.items[i];
-//         //artist
-//         console.log("Artist: " + songData.artists[0].name);
-//         //song name
-//         console.log("Song: " + songData.name);
-//         //spotify preview link
-//         console.log("Preview URL: " + songData.preview_url);
-//         //album name
-//         console.log("Album: " + songData.album.name);
-//         console.log("-----------------------");
-        
-//         //adds text to log.txt
-//         fs.appendFile('log.txt', songData.artists[0].name);
-//         fs.appendFile('log.txt', songData.name);
-//         fs.appendFile('log.txt', songData.preview_url);
-//         fs.appendFile('log.txt', songData.album.name);
-//         fs.appendFile('log.txt', "-----------------------");
-//       }
-//     } else{
-//       console.log('Error occurred.');
-//     }
-//   });
-// }
         function spotifySong(value) {
                 
-                    
-          
-            //     var songInfo = process.argv;
-            //     songInfo.shift();
-            //     songInfo.shift();
-            //     request(spotifySong(songInfo.join('+')),
-
-            //     // var queryString = process.argv[3];
-            //     spotify.search({ type: 'track', query: queryString, limit: 1 }, function(err, data) {
-            //         if (err) {
-            //             console.log('error = ' + err);
-            //         }
-                
-            //         console.log('spotify data = ', data);
-            //         console.log(data.tracks.items[0]);
-
-                
-            //     }));
-            // }
-                 Spotify.search({type: 'track', query: value || 'ace of base the sign'}, function(err, data) {
+                 spotifyClient.search({type: 'track', query: value || 'ace of base the sign'}, function(err, data) {
     if (err) {
         console.log('Error occurred: ' + err);
         return;
@@ -247,7 +174,7 @@ for (var i=3; i<nodeArgv.length; i++){
         }
              
         function followCommand() {
-            fs.readFile('random.txt', "utf8", function(error, data) {
+            fs.readFile('log.txt', "utf8", function(error, data) {
                 var txt = data.split(',')
 
                 spotifySong(txt[1]);
