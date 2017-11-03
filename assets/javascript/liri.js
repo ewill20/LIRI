@@ -25,6 +25,8 @@ var demand = process.argv[2];
 var demandArgument = process.argv[3];
 var params = process.argv.slice(2);
 var x = "";
+
+
 // Attaches multiple word arguments //
 for (var i=3; i<nodeArgv.length; i++){
   if(i>3 && i<nodeArgv.length){
@@ -37,10 +39,6 @@ for (var i=3; i<nodeArgv.length; i++){
         case "my-tweets":
             displayTweets();
             break;
-
-        // case "My-IG":
-        //     instagramPosts();
-        //     break;
     
         case "spotify-this-song":
             if(x){
@@ -172,15 +170,18 @@ for (var i=3; i<nodeArgv.length; i++){
                 }
             });
         }
-             
+        // A function to add information to log.txt and then run the command using "fs" //  
         function followCommand() {
-            fs.readFile('log.txt', "utf8", function(error, data) {
-                var txt = data.split(',')
+            fs.readFile('log.txt', "utf8", function(err, data) {
+                if(err) throw err;
+                console.log(data.toString());
+                
+                var txt = data.toString().split(','); 
 
                 spotifySong(txt[1]);
             });
         }
-
+    
 
 
     
